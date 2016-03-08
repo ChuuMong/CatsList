@@ -1,0 +1,31 @@
+general:
+  branches:
+    only:
+      - master
+  artifacts:
+    - "app/build/outputs/apk/app-debug.apk"
+
+checkout :
+  post :
+    - chmod +x ./gradlew
+    - chmod +x ./deploy.sh
+
+machine:
+  java:
+    version: oraclejdk8
+  environment:
+    ANDROID_HOME: /usr/local/android-sdk-linux
+
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --filter "android-23,build-tools-23.0.1"
+
+test:
+  override:
+    - echo "Nothing to do here"
+
+deployment:
+  master:
+    branch: master
+    commands :
+      - ./deploy.sh

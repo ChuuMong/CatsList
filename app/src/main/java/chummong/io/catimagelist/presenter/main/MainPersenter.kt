@@ -41,6 +41,7 @@ class MainPersenterImpl(val view: MainView) : MainPersenter {
 
         view.showProgress()
         Log.d("MainPersenterImpl", "moreGetCatsList")
+
         moreCatsListSub = moreCatsListRequest()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -67,7 +68,7 @@ class MainPersenterImpl(val view: MainView) : MainPersenter {
     private fun showMoreCatList(): Subscriber<FlickrResult> {
         return object : Subscriber<FlickrResult>() {
             override fun onNext(result: FlickrResult) {
-                view.showMoreCatsList(result.photos.photos)
+                view.showCatsList(result.photos.photos)
             }
 
             override fun onCompleted() {
@@ -81,6 +82,7 @@ class MainPersenterImpl(val view: MainView) : MainPersenter {
     }
 
     private fun catsListRequest(): Observable<FlickrResult> {
+        MAX_IMAGES_PER_REQUEST = 10
         return RestApiManager.getApi(PhotoService::class.java).getCatList(MAX_IMAGES_PER_REQUEST)
     }
 

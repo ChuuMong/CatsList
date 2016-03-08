@@ -9,5 +9,4 @@ import chummong.io.catimagelist.presenter.View
 
 interface MainView : View {
     fun showCatsList(photos: List<Photo>)
-    fun showMoreCatsList(photos: List<Photo>)
 }

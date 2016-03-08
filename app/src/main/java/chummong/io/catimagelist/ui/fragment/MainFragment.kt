@@ -79,10 +79,6 @@ class MainFragment : Fragment(), MainView {
         catsAdatper.items = photos
     }
 
-    override fun showMoreCatsList(photos: List<Photo>) {
-        catsAdatper.items += photos
-    }
-
     override fun showProgress() {
         progress.visibility = View.VISIBLE
     }

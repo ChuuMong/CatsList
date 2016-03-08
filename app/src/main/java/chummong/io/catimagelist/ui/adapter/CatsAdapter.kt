@@ -20,23 +20,13 @@ import kotlin.properties.Delegates
 
 class CatsAdapter : RecyclerView.Adapter<ViewHolader>() {
 
-    private val VIEWTYPE_ITEM = 1;
-    private val VIEWTYPE_LOADER = 2;
-
     var items: List<Photo> by Delegates.observable(emptyList()) { prop, old, new ->
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolader? {
-        when (viewType) {
-            VIEWTYPE_ITEM -> return ViewHolader(parent.context.layoutInflater.inflate(R.layout.item_cats_list, parent, false))
-            VIEWTYPE_LOADER -> return
-            else {
-                return null
-            }
-        }
-
-
+        val view = parent.context.layoutInflater.inflate(R.layout.item_cats_list, parent, false)
+        return ViewHolader(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolader, postion: Int) {
@@ -45,15 +35,6 @@ class CatsAdapter : RecyclerView.Adapter<ViewHolader>() {
 
     override fun getItemCount(): Int {
         return items.size
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        if (!items.isEmpty() && position == itemCount - 1) {
-            return VIEWTYPE_LOADER
-        }
-        else {
-            return VIEWTYPE_ITEM
-        }
     }
 }
 
