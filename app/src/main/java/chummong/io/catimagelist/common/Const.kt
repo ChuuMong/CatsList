@@ -10,13 +10,11 @@ import java.util.concurrent.TimeUnit
  */
 object Const {
 
-    val API_KEY = "bff34de3801e66a721c4fd79f03d3e18"
-    val API_SECRET = "c253dcd09e8aa718"
-
+    val API_KEY = "pnCXuNcDAoOdOVHVHfaCRQbRap9mCo3aXS3ccM7b"
     /**
      * Test End Point
      */
-    val END_PONIT = "https://api.flickr.com/services/rest/"
+    val END_PONIT = "https://api.500px.com/v1/"
 
     /**
      * Retry Delay Time(Second)

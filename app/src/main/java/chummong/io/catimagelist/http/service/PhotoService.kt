@@ -1,7 +1,8 @@
 package chummong.io.catimagelist.http.service
 
-import chummong.io.catimagelist.dto.FlickrResult
+import chummong.io.catimagelist.model.dto.PhotoSearch
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import rx.Observable
 
@@ -10,6 +11,9 @@ import rx.Observable
  */
 interface PhotoService {
 
-    @GET("?method=flickr.photos.search&text=cat")
-    fun getCatList(@Query("per_page") page: Int): Observable<FlickrResult>
+    @GET("photos/search?&term=cats&tag=cat&only=Animals&tags=true&image_size=3")
+    fun getPhotoList(@Query("page") page: Int): Observable<PhotoSearch>
+
+    @GET("photos/{photoId}/")
+    fun getDetailPhoto(@Path("photoId") id: Int, @Query("image_size") imageSize: Int)
 }

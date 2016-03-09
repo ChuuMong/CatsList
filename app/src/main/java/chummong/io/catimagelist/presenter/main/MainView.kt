@@ -1,6 +1,6 @@
 package chummong.io.catimagelist.presenter.main
 
-import chummong.io.catimagelist.dto.Photo
+import chummong.io.catimagelist.model.dto.Photo
 import chummong.io.catimagelist.presenter.View
 
 /**
@@ -9,4 +9,5 @@ import chummong.io.catimagelist.presenter.View
 
 interface MainView : View {
     fun showCatsList(photos: List<Photo>)
+    fun showMoreCatsList(photos: List<Photo>)
 }

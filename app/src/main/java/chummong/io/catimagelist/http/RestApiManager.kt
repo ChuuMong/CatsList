@@ -43,7 +43,7 @@ object RestApiManager {
         val cacheSize = 10 * 1024 * 1024 // 10MB
         val cachePath = App.CONTEXT?.cacheDir
 
-        return OkHttpClient.Builder().cache(Cache(cachePath, cacheSize.toLong()))
+        return OkHttpClient.Builder().cache(Cache(cachePath, cacheSize.toLong()))   // Response Cache
                 .addInterceptor(RequestInterceptor())
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
@@ -55,9 +55,7 @@ private class RequestInterceptor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response? {
         var request = chain.request()
         val url = request.url().newBuilder()
-                .addQueryParameter("api_key", Const.API_KEY)
-                .addQueryParameter("format", "json")
-                .addQueryParameter("nojsoncallback", "1").build()
+                .addQueryParameter("consumer_key", Const.API_KEY).build()
 
         request = request.newBuilder().url(url).build()
 

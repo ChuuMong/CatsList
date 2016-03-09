@@ -5,5 +5,10 @@ package chummong.io.catimagelist.presenter
  */
 interface View {
     fun showProgress()
-    fun hiedProgress()
+
+    fun hideProgress()
+
+    fun finish()
+
+    fun networkError(e: Throwable)
 }
