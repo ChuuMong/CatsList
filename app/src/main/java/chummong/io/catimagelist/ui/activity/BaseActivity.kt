@@ -17,9 +17,7 @@ import android.support.v7.app.AppCompatActivity
 abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
-
 
     /**
      * Activity Show
@@ -66,13 +64,25 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * Fragment Add
      */
-    protected fun addFragment(contentFrame: Int, addFragment: Fragment, tag: String? = null) {
+    protected fun addFragment(contentFrame: Int, addFragment: Fragment, isAdd: Boolean, tag: String? = null, animIn: Int = -1,
+                              animOut: Int = -1) {
         val manager = supportFragmentManager
-        val fragment = manager.findFragmentById(contentFrame)
-        if (fragment == null) {
-            manager.beginTransaction().add(contentFrame, addFragment, tag).commit()
+        val ft = manager.beginTransaction()
+
+        if (animIn != -1 && animOut != -1) {
+            ft.setCustomAnimations(animIn, animOut)
         }
+
+        if (isAdd) {
+            ft.add(contentFrame, addFragment, tag).addToBackStack(null)
+        }
+        else {
+            ft.replace(contentFrame, addFragment, tag)
+        }
+
+        ft.commit()
     }
+
 
     /**
      * Dialog 생성 메소드
@@ -131,5 +141,9 @@ abstract class BaseActivity : AppCompatActivity() {
             builder.setNegativeButton(negativeResId, negativeListener)
         }
         return builder.show()
+    }
+
+    protected fun showNetworkErrorDialog(error: Throwable) {
+        AlertDialog.Builder(this).setMessage(error.message).show()
     }
 }

@@ -12,6 +12,7 @@ import rx.functions.Func1
 import rx.lang.kotlin.subscriber
 import rx.schedulers.Schedulers
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by LeeJongHun on 2016-03-07.
@@ -22,14 +23,17 @@ interface MainPersenter : Persenter {
     fun moreGetCatsList()
 }
 
-class MainPersenterImpl(val view: MainView) : MainPersenter {
-    private var MAX_IMAGES_PER_REQUEST = 10
+class MainPersenterImpl
+@Inject constructor(val view: MainView) : MainPersenter {
+    private var MAX_IMAGES_PER_REQUEST = 1
     private var catsListSub: Subscription? = null
     private var moreCatsListSub: Subscription? = null
 
     override fun getCatsList() {
         view.showProgress()
-        catsListSub = catsListRequest()
+        MAX_IMAGES_PER_REQUEST = 1
+
+        catsListSub = catsListRequest(MAX_IMAGES_PER_REQUEST)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnUnsubscribe { view.hideProgress() }
@@ -46,7 +50,7 @@ class MainPersenterImpl(val view: MainView) : MainPersenter {
 
         view.showProgress()
 
-        moreCatsListSub = moreCatsListRequest()
+        moreCatsListSub = catsListRequest(++MAX_IMAGES_PER_REQUEST)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnUnsubscribe { view.hideProgress() }
@@ -55,7 +59,6 @@ class MainPersenterImpl(val view: MainView) : MainPersenter {
                                    .onNext { result -> view.showMoreCatsList(result) }
                                    .onError { error -> view.networkError(error) })
     }
-
 
     private fun makeUniqueltIdList(): Func1<PhotoSearch, ArrayList<Photo>> {
         return Func1 { result ->
@@ -84,13 +87,8 @@ class MainPersenterImpl(val view: MainView) : MainPersenter {
         }
     }
 
-    private fun catsListRequest(): Observable<PhotoSearch> {
-        MAX_IMAGES_PER_REQUEST = 1
-        return RestApiManager.getApi(PhotoService::class.java).getPhotoList(MAX_IMAGES_PER_REQUEST)
-    }
-
-    private fun moreCatsListRequest(): Observable<PhotoSearch> {
-        return RestApiManager.getApi(PhotoService::class.java).getPhotoList(++MAX_IMAGES_PER_REQUEST)
+    private fun catsListRequest(page: Int): Observable<PhotoSearch> {
+        return RestApiManager.getApi(PhotoService::class.java).getPhotoList(page)
     }
 
     override fun allThreadRemove() {

@@ -19,7 +19,11 @@ import kotlin.properties.Delegates
  * Created by LeeJongHun on 2016-03-07.
  */
 
-class CatsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+interface OnClickListener {
+    fun onClick(view: View, position: Int)
+}
+
+class CatsAdapter(val listener: OnClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_ITEM = 0
     private val VIEW_FOOTER = 1
 
@@ -46,6 +50,7 @@ class CatsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewItemHolder) {
+            holder.view.setOnClickListener { view -> listener.onClick(view, position) }
             holder.setImage(getItem(position))
         }
     }
